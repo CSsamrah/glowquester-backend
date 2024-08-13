@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require("cors")
 const port = 5000;
-const mainRoutes=require('../src/routes/mainRoutes')
+const mainRoutes=require('./src/routes/mainRoutes')
 
 app.use(cors({
     origin: 'http://localhost:3000', // Frontend URL
