@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require("cors")
-const port = 5000;
+const port = process.env.PORT || 5000;
 const mainRoutes=require('./src/routes/mainRoutes')
 
 app.use(cors({
@@ -10,9 +10,6 @@ app.use(cors({
     credentials: true // Allows cookies to be sent
 }));
 app.use(express.json());
-
-let connectToDatabase = require("./db");
-connectToDatabase();
 
 app.use('/skincare', mainRoutes);
 
