@@ -26,3 +26,6 @@ router.get('/orderDetails/:order_id',getParticularOrder)
 router.post('/checkout',checkoutInfo)
 router.get("/shipment",getShipmentDetails)
 router.get('/shipment/:shipping_id',getParticularShipment)
+
+
+module.exports = router;
