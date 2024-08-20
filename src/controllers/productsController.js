@@ -14,30 +14,39 @@ const addingProduct=async(req,res)=>{
     }
 }
 // get product details
-const getProductDetails=async(req,res)=>{
+const getProductDetails = async (req, res) => {
     const { product_id } = req.params;
-  
+    console.log('Fetching product with ID:', req.params.product_id);
+
     try {
-      const selectQuery = 'SELECT * FROM product WHERE product_id = $1';
-      const result = await pool.query(selectQuery, [product_id]);
-  
-      if (result.rows.length > 0) {
-        const product = result.rows[0];
-        // Assuming 'image_data' is the column containing bytea data
-        const imageData = product.picture.toString('base64');
-        const productWithBase64Image = {
-          ...product,
-          image_data: imageData,
-        };
-        res.json(productWithBase64Image);
-      } else {
-        res.status(404).send('Product not found');
-      }
+        const selectQuery = 'SELECT * FROM product WHERE product_id = $1';
+        const result = await pool.query(selectQuery, [product_id]);
+
+        if (result.rows.length > 0) {
+            const product = result.rows[0];
+
+            if (product.picture) {
+                // Convert binary data or escaped string to Base64
+                if (typeof product.picture === 'string' && product.picture.startsWith('\\x')) {
+                    // If the picture is a hex string (like \\xffd8...), decode it first
+                    const binaryData = Buffer.from(product.picture.slice(2), 'hex');
+                    product.picture = `data:image/jpeg;base64,${binaryData.toString('base64')}`;
+                    console.log(product.picture)
+                } else {
+                    // If it's already binary, convert directly
+                    product.picture = `data:image/jpeg;base64,${Buffer.from(product.picture, 'binary').toString('base64')}`;
+                }
+            }
+
+            res.json(product);
+        } else {
+            res.status(404).send('Product not found');
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 //delete product
 const deleteProduct= async (req, res) => {
