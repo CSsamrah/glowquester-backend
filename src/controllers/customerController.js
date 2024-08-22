@@ -73,7 +73,7 @@ const signUp= async (req, res) => {
                 if (err) {
                     res.status(500).json({ error: 'Internal server error' });
                 } else if (result) {
-                    res.status(200).json({ message: 'Login successful' });
+                    res.status(200).json({ message: 'Login successful', email: email});
                 } else {
                     res.status(401).json({ error: 'Invalid username or password' });
                 }
