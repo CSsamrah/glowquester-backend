@@ -9,6 +9,7 @@ const{addingProduct, getProductDetails, deleteProduct, editProductQuantity, edit
 const { getCustomerInfo, getRegCustomerById, getRegisteredCustomer, signUp, signIn } = require('../controllers/customerController');
 const { getOrderDetails, getParticularOrder,checkoutInfo } = require('../controllers/orderController');
 const { getShipmentDetails, getParticularShipment } = require('../controllers/shipmentController');
+const ipWhitelist=require('../middleware/auth')
 
 router.post('/add-product', upload.single('picture'),addingProduct)
 router.get('/product/:product_id',getProductDetails)
@@ -20,7 +21,7 @@ router.get('/customers',getCustomerInfo)
 router.get('/registered-customers',getRegisteredCustomer)
 router.get('/registered-customers/:user_id',getRegCustomerById)
 router.post("/sign-up",signUp)
-router.post("/login",signIn)
+router.post("/login",ipWhitelist,signIn)
 router.get('/orderDetails',getOrderDetails)
 router.get('/orderDetails/:order_id',getParticularOrder)
 router.post('/checkout',checkoutInfo)
