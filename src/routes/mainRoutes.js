@@ -11,14 +11,14 @@ const { getOrderDetails, getParticularOrder,checkoutInfo } = require('../control
 const { getShipmentDetails, getParticularShipment } = require('../controllers/shipmentController');
 const {ipWhitelist}= require('../middleware/auth')
 
-router.post('/add-product', upload.single('picture'),addingProduct)
+router.post('/add-product', ipWhitelist, upload.single('picture'),addingProduct)
 router.get('/product/:product_id',getProductDetails)
-router.delete("/product/:product_id",deleteProduct)
-router.put("/product/:product_id/quantity",editProductQuantity)
-router.put("/product/:product_id/price",editProductPrice)
+router.delete("/product/:product_id", ipWhitelist,deleteProduct)
+router.put("/product/:product_id/quantity", ipWhitelist,editProductQuantity)
+router.put("/product/:product_id/price", ipWhitelist,editProductPrice)
 router.get('/product',getAllProducts)
 router.get('/customers',getCustomerInfo)
-router.get('/registered-customers',getRegisteredCustomer)
+router.get('/registered-customers',ipWhitelist,getRegisteredCustomer)
 router.get('/registered-customers/:user_id',getRegCustomerById)
 router.post("/sign-up",signUp)
 router.post('/login', ipWhitelist, signIn);
