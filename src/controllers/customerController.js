@@ -57,8 +57,7 @@ const signUp= async (req, res) => {
 };
 
 // sign in
-
- const signIn=async (req, res) => {
+const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -71,18 +70,20 @@ const signUp= async (req, res) => {
 
             bcrypt.compare(password, hashedPassword, (err, result) => {
                 if (err) {
+                    console.error('Error comparing passwords:', err);
                     res.status(500).json({ error: 'Internal server error' });
                 } else if (result) {
-                    res.status(200).json({ message: 'Login successful', email: email});
+                    // Send the email to the frontend upon successful login
+                    res.status(200).json({ message: 'Login successful', email: email });
                 } else {
                     res.status(401).json({ error: 'Invalid username or password' });
                 }
             });
         } else {
-            res.status(404).json({ error: 'registered user not found' });
+            res.status(404).json({ error: 'Registered user not found' });
         }
     } catch (error) {
-        console.error(error.message);
+        console.error('Server error:', error.message);
         res.status(500).send('Server error');
     }
 };
